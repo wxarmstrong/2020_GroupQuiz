@@ -89,6 +89,8 @@ class SequentialOrdering
 		return solution;
 	}
 
+
+
 	public static String[] solve2(String[] projects, String[][] dependencies)
 	{
 		HashMap<String, Node> table = new HashMap<String,Node>();
@@ -158,6 +160,58 @@ class SequentialOrdering
 		return solution;
 	}
 
+	public static String[] solve3(String[] projects, String[][] dependencies)
+	{
+		HashMap<String, Node> table = new HashMap<String,Node>();
+		
+		for (String curProject : projects)
+		{
+			Node curNode = new Node();
+			table.put(curProject, curNode);
+		}
+		
+		for (String[] curDep : dependencies)
+		{
+			String first = curDep[0];
+			String second = curDep[1];
+			Node curNode = table.get(second);
+			curNode.parents.add(first);
+			curNode = table.get(first);
+			curNode.children.add(second);
+		}
+		
+		Queue<String> available = new LinkedList<String>();
+		for (String curProject : projects)
+		{
+			Node curNode = table.get(curProject);
+			if (curNode.parents.size() == 0)
+				available.add(curProject);
+		}
+		
+		String[] solution = new String[projects.length];
+		int pos = 0;
+		
+		while (available.size() > 0)
+		{
+			String curProject = available.poll();
+			solution[pos] = curProject;
+			pos++;
+			Node curNode = table.get(curProject);
+			for (String curChild : curNode.children)
+			{
+				Node childNode = table.get(curChild);
+				childNode.parents.remove(curProject);
+				if (childNode.parents.size() == 0)
+					available.add(curChild);
+			}
+		}
+		
+		if (pos < projects.length)
+			throw new ArithmeticException("No solution");	
+			
+		return solution;
+	}
+
 	public static void printArray(String[] arr)
 	{
 		for (int i=0; i<arr.length; i++)
@@ -189,6 +243,12 @@ class SequentialOrdering
 		String[] solution2 = solve2(projects, dependencies);
 		endTime = System.nanoTime();
 		printArray(solution2);
+		System.out.println("Time for solve2: " + (endTime-startTime) + "ns");
+		
+		startTime = System.nanoTime();
+		String[] solution3 = solve3(projects, dependencies);
+		endTime = System.nanoTime();
+		printArray(solution3);
 		System.out.println("Time for solve2: " + (endTime-startTime) + "ns");
 	}		
 	
