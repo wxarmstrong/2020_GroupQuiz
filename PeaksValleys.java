@@ -6,6 +6,28 @@ Fall 2020
 10/21/2020
 */
 
+/*
+COMPLEXITY ANALYSIS
+-------------------
+sort()
+
+Time complexity  :
+Key operation    : The comparison in findMin / findMax
+All cases: Starting with the full array, the minimum or maximum is found. Then the array from 1 to n is checked and so on.
+Thus the number of operations is the summation of 1...n or (n)(n+1)/2.
+Hence the complexity is in O(n^2)
+Memory complexity: O(1) (in-place sort)
+-------------------
+sort2()
+
+Time complexity  :
+All cases: The computation time is dominated by the quicksort algorithm that initially sorts the array.
+Thus this complexity is the same as quicksort -> O(n log n) in all cases.
+The remainder of the algorithm is in linear time O(n)
+Memory complexity: O(1) (in-place sort)
+-------------------
+*/
+
 import java.util.*;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
