@@ -1,3 +1,11 @@
+/*
+William Armstrong
+CS 3310
+Cal Poly Pomona
+Fall 2020
+10/21/2020
+*/
+
 import java.util.*;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
