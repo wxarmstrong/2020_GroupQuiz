@@ -224,11 +224,11 @@ class SequentialOrdering
 	public static void main(String[] args)  
 	{
 		String[] projects = new String[] {
-			"a","b","c","d","e","f","g","h","i","j","k"
+			"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D"
 		};
 		
 		String[][] dependencies = new String[][] {
-			{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"},{"k","a"},{"b","j"},{"j","g"},{"k","i"},{"b","a"},{"i","h"}
+		{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"},{"k","a"},{"b","j"},{"j","g"},{"k","i"},{"b","a"},{"i","h"},{"d","m"},{"h","r"},{"g","p"},{"z","x"},{"x","b"},{"g","s"},{"s","k"},{"B","e"},{"b","A"},{"r","q"},{"q","t"},{"B","w"},{"C","f"},{"t","l"},{"h","n"},{"f","w"},{"a","B"},{"q","B"}
 		};
 		
 		long startTime, endTime;
@@ -249,7 +249,7 @@ class SequentialOrdering
 		String[] solution3 = solve3(projects, dependencies);
 		endTime = System.nanoTime();
 		printArray(solution3);
-		System.out.println("Time for solve2: " + (endTime-startTime) + "ns");
+		System.out.println("Time for solve3: " + (endTime-startTime) + "ns");
 	}		
 	
 }
