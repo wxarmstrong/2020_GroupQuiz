@@ -1,3 +1,42 @@
+/*
+William Armstrong
+CS 3310
+Cal Poly Pomona
+Fall 2020
+10/21/2020
+*/
+
+/*
+COMPLEXITY ANALYSIS:
+(Note: these complexities are based on the assumption that a valid solution exists)
+--------------------
+solve() / solve2():
+Time Complexity  :
+Key Operation    : HashMap lookup
+Best case : If the dependencies are such that the initial project list is already a valid solution, then only V+E lookups occur.
+Thus the time complexity is O(V+E). (linear)
+Worst case: If the dependencies are such that every iteration over the project list only causes one new project to be added to the ongoing solution,
+then O(V) iterations are required with O(V+E) key operations per iteration.
+The time complexity is O(V^2 + E). (quadratic)
+Average case: In O(V^2) (upper bound via worst case)
+
+Memory Complexity: 
+A HashMap is created containing a separate node for each project (vertex). Each dependency is listed twice, either as a parent->child or child->parent edge.
+Thus the memory complexity is in O(V+2E) -> O(V+E)
+--------------------
+solve3():
+Time Complexity  :
+All cases: Each project is looked up in the HashMap once when it is moved from the queue to the solution, then every child of that project needs to be looked up
+in order to remove the previous project from the parent lists.
+Thus the time complexity is in O(V+E).
+
+Memory Complexity:
+A HashMap is created containing a separate node for each project (vertex). Each dependency is listed twice, either as a parent->child or child->parent edge.
+A Queue is also created with max length equal to the number of projects.
+Thus the memory complexity is in O(2V+2E) -> O(V+E)
+--------------------
+*/
+
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
