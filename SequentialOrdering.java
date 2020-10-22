@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 class SequentialOrdering
 {
@@ -6,10 +7,12 @@ class SequentialOrdering
 		
 		boolean placed = false;
 		Set<String> parents;
+		Set<String> children;
 		
 		public Node()
 		{
 			parents = new HashSet<String>();
+			children = new HashSet<String>();
 		}
 	};
 	
@@ -76,7 +79,76 @@ class SequentialOrdering
 				}
 			}
 			
-			// If no new nodes were added in this iteration,
+			// If no projects were added in this iteration,
+			//  that indicates a circular dependency, and
+			//  thus no solution exists.
+			if (pos == lastPos)
+				throw new ArithmeticException("No solution");
+		}
+		
+		return solution;
+	}
+
+	public static String[] solve2(String[] projects, String[][] dependencies)
+	{
+		HashMap<String, Node> table = new HashMap<String,Node>();
+		
+		for (int i = 0; i < projects.length; i++)
+		{
+			Node curNode = new Node();
+			table.put(projects[i], curNode);
+		}
+		
+		for (int i = 0; i < dependencies.length; i++)
+		{
+			String[] curDep = dependencies[i];
+			String first = curDep[0];
+			String second = curDep[1];
+			Node curNode = table.get(second);
+			curNode.parents.add(first);
+			curNode = table.get(first);
+			curNode.children.add(second);
+		}
+		
+		// Debug to check that dependencies are listed correctly
+		/*
+		for (int i = 0; i < projects.length; i++)
+		{
+			Node curNode = table.get(projects[i]);
+			System.out.print("Parents of " + projects[i] + ": ");
+			for (String curParent : curNode.parents)
+				System.out.print( curParent );
+			System.out.println();
+		}
+		*/
+		
+		String[] solution = new String[projects.length];
+		int pos = 0;
+		
+		while (pos < projects.length)
+		{
+			int lastPos = pos;
+			
+			for (int i = 0; i < projects.length; i++)
+			{
+				String curProject = projects[i];
+				Node curNode = table.get(curProject);
+				// Only place a new item in the list once all of its parents have been accounted for
+				if (!curNode.placed && curNode.parents.size() == 0)
+				{
+					// Remove this item from the parents list of all of its children
+					for (String curChild : curNode.children)
+					{
+						table.get(curChild).parents.remove(curProject);
+					}
+					solution[pos] = curProject;
+					curNode.placed = true;
+					pos++;
+				}					
+			}
+		
+			
+			// If no projects were added in this iteration,
 			//  that indicates a circular dependency, and
 			//  thus no solution exists.
 			if (pos == lastPos)
@@ -98,15 +170,26 @@ class SequentialOrdering
 	public static void main(String[] args)  
 	{
 		String[] projects = new String[] {
-			"a","b","c","d","e","f"
+			"a","b","c","d","e","f","g","h","i","j","k"
 		};
 		
 		String[][] dependencies = new String[][] {
-			{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"}
+			{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"},{"k","a"},{"b","j"},{"j","g"},{"k","i"},{"b","a"},{"i","h"}
 		};
 		
+		long startTime, endTime;
+		
+		startTime = System.nanoTime();
 		String[] solution = solve(projects, dependencies);
+		endTime = System.nanoTime();
 		printArray(solution);
+		System.out.println("Time for solve : " + (endTime-startTime) + "ns");
+		
+		startTime = System.nanoTime();
+		String[] solution2 = solve2(projects, dependencies);
+		endTime = System.nanoTime();
+		printArray(solution2);
+		System.out.println("Time for solve2: " + (endTime-startTime) + "ns");
 	}		
 	
 }
